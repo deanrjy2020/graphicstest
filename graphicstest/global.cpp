@@ -7,3 +7,6 @@ bool callHelp = false;
 
 int defaultWidth = 640;
 int defaultHeight = 480;
+
+// User passes the options to here for debugging.
+char *debugOptions = nullptr;

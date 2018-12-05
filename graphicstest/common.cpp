@@ -12,6 +12,7 @@ extern int defaultHeight;
 extern char *runSingleTestName;
 extern bool interactive;
 extern char *outputDir;
+extern char *debugOptions;
 
 Common::Common() {
     framebufferSize = defaultWidth * defaultHeight * 4;
@@ -104,25 +105,6 @@ void Common::checkEglError(const char* op)
 // The program has only EGL instance and if you want different, create by your own.
 int Common::initEGL()
 {
-    EGLint numConfigs = 0, configId = 0;
-    EGLConfig myConfig = {0};
-
-    // EGL_CONTEXT_CLIENT_VERSION only tell the major version. and only for es?
-    // if we need the minor version, use below.
-    // it can be used for GL and ES.
-    // https://www.khronos.org/registry/EGL/extensions/KHR/EGL_KHR_create_context.txt
-    EGLint context_attribs[] = { EGL_CONTEXT_MAJOR_VERSION_KHR, 3,
-                                 EGL_CONTEXT_MINOR_VERSION_KHR, 2,
-                                 EGL_NONE };
-    EGLint s_configAttribs[] = {
-        EGL_RED_SIZE,			8,
-        EGL_GREEN_SIZE,			8,
-        EGL_BLUE_SIZE,			8,
-        EGL_ALPHA_SIZE,                 8,
-        EGL_SURFACE_TYPE,               EGL_WINDOW_BIT,
-        EGL_RENDERABLE_TYPE,            EGL_OPENGL_ES2_BIT,
-        EGL_NONE };
-
     checkEglError("Before Initialize EGL");
     defaultDisplay = eglGetDisplay(EGL_DEFAULT_DISPLAY);
     if (defaultDisplay == EGL_NO_DISPLAY) {
@@ -134,17 +116,50 @@ int Common::initEGL()
 
     defaultWindow = defaultWindowSurface.getSurface();
 
-    eglChooseConfig(defaultDisplay, s_configAttribs, &myConfig, 1, &numConfigs);
+    EGLint numConfigs = 0, configId = 0;
+    EGLConfig myConfig = {0};
+    if (!std::strcmp(debugOptions, "1")) {
+        EGLint s_configAttribs[] = {
+            EGL_RED_SIZE,                   8,
+            EGL_GREEN_SIZE,                 8,
+            EGL_BLUE_SIZE,                  8,
+            EGL_ALPHA_SIZE,                 8,
+            EGL_SURFACE_TYPE,               EGL_WINDOW_BIT,
+            EGL_RENDERABLE_TYPE,            EGL_OPENGL_ES2_BIT,
+            EGL_COLOR_COMPONENT_TYPE_EXT,   EGL_COLOR_COMPONENT_TYPE_FLOAT_EXT,
+            EGL_NONE };
+        eglChooseConfig(defaultDisplay, s_configAttribs, &myConfig, 1, &numConfigs);
+    } else {
+        EGLint s_configAttribs[] = {
+            EGL_RED_SIZE,                   8,
+            EGL_GREEN_SIZE,                 8,
+            EGL_BLUE_SIZE,                  8,
+            EGL_ALPHA_SIZE,                 8,
+            EGL_SURFACE_TYPE,               EGL_WINDOW_BIT,
+            EGL_RENDERABLE_TYPE,            EGL_OPENGL_ES2_BIT,
+            EGL_NONE };
+        eglChooseConfig(defaultDisplay, s_configAttribs, &myConfig, 1, &numConfigs);
+    }
+
     if (numConfigs == 0) {
         DEBUG_PRINT("Failed to choose a config that supports EGL_MUTABLE_RENDER_BUFFER_BIT_KHR.\n");
     }
     eglGetConfigAttrib(defaultDisplay, myConfig, EGL_CONFIG_ID, &configId);
 
-    defaultSurface = eglCreateWindowSurface(defaultDisplay, myConfig, defaultWindow, NULL);
+    EGLint winAttribs[] = {EGL_GL_COLORSPACE_KHR, EGL_GL_COLORSPACE_SRGB_KHR, EGL_NONE};
+    defaultSurface = eglCreateWindowSurface(defaultDisplay, myConfig, defaultWindow, winAttribs);
     if (defaultSurface == EGL_NO_SURFACE) {
         DEBUG_PRINT("gelCreateWindowSurface failed.\n");
         return 0;
     }
+
+    // EGL_CONTEXT_CLIENT_VERSION only tell the major version. and only for es?
+    // if we need the minor version, use below.
+    // it can be used for GL and ES.
+    // https://www.khronos.org/registry/EGL/extensions/KHR/EGL_KHR_create_context.txt
+    EGLint context_attribs[] = { EGL_CONTEXT_MAJOR_VERSION_KHR, 3,
+                                 EGL_CONTEXT_MINOR_VERSION_KHR, 2,
+                                 EGL_NONE };
 
     defaultContext = eglCreateContext(defaultDisplay, myConfig, EGL_NO_CONTEXT, context_attribs);
     if (defaultContext == EGL_NO_CONTEXT) {

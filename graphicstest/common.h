@@ -22,6 +22,7 @@
     #define DEBUG_PRINT(...) \
     do {                     \
         printf(__VA_ARGS__); \
+        printf("\n");        \
         fflush(stdout);      \
     } while (0)
 #else

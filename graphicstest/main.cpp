@@ -9,6 +9,7 @@ extern char *executableName;
 extern bool interactive;
 extern char *runSingleTestName;
 extern char *outputDir;
+extern char *debugOptions;
 extern bool callHelp;
 
 static void printHelp(std::string cmd, std::string des) {
@@ -17,6 +18,7 @@ static void printHelp(std::string cmd, std::string des) {
 
 static void printUsage() {
     printHelp("no arguements", "run all the supported tests.");
+    printHelp("-d <any>", "user defined string for debugging.");
     printHelp("-i", "interactive mode.");
     printHelp("-o <dir>", "image output directory.");
     printHelp("-t <test>", "run test by name.");
@@ -26,6 +28,11 @@ void parseCmdLine(int argc, char** argv) {
     executableName = argv[0];
     for (int i = 1; i < argc; i++) {
         // sorted by lexicographically.
+        if (!std::strcmp(argv[i], "-d")) {
+            // basically, need to check the next parameter is available.
+            debugOptions = argv[++i];
+            continue;
+        }
         if (!std::strcmp(argv[i], "-h")) {
             printUsage();
             callHelp = true;
