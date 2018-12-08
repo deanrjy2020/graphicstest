@@ -118,28 +118,15 @@ int Common::initEGL()
 
     EGLint numConfigs = 0, configId = 0;
     EGLConfig myConfig = {0};
-    if (!std::strcmp(debugOptions, "1")) {
-        EGLint s_configAttribs[] = {
-            EGL_RED_SIZE,                   8,
-            EGL_GREEN_SIZE,                 8,
-            EGL_BLUE_SIZE,                  8,
-            EGL_ALPHA_SIZE,                 8,
-            EGL_SURFACE_TYPE,               EGL_WINDOW_BIT,
-            EGL_RENDERABLE_TYPE,            EGL_OPENGL_ES2_BIT,
-            EGL_COLOR_COMPONENT_TYPE_EXT,   EGL_COLOR_COMPONENT_TYPE_FLOAT_EXT,
-            EGL_NONE };
-        eglChooseConfig(defaultDisplay, s_configAttribs, &myConfig, 1, &numConfigs);
-    } else {
-        EGLint s_configAttribs[] = {
-            EGL_RED_SIZE,                   8,
-            EGL_GREEN_SIZE,                 8,
-            EGL_BLUE_SIZE,                  8,
-            EGL_ALPHA_SIZE,                 8,
-            EGL_SURFACE_TYPE,               EGL_WINDOW_BIT,
-            EGL_RENDERABLE_TYPE,            EGL_OPENGL_ES2_BIT,
-            EGL_NONE };
-        eglChooseConfig(defaultDisplay, s_configAttribs, &myConfig, 1, &numConfigs);
-    }
+    EGLint s_configAttribs[] = {
+        EGL_RED_SIZE,                   8,
+        EGL_GREEN_SIZE,                 8,
+        EGL_BLUE_SIZE,                  8,
+        EGL_ALPHA_SIZE,                 8,
+        EGL_SURFACE_TYPE,               EGL_WINDOW_BIT,
+        EGL_RENDERABLE_TYPE,            EGL_OPENGL_ES2_BIT,
+        EGL_NONE };
+    eglChooseConfig(defaultDisplay, s_configAttribs, &myConfig, 1, &numConfigs);
 
     if (numConfigs == 0) {
         DEBUG_PRINT("Failed to choose a config that supports EGL_MUTABLE_RENDER_BUFFER_BIT_KHR.\n");

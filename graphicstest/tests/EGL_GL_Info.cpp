@@ -105,6 +105,7 @@ bool EGL_GL_Info::doGraphics() {
     if (!printEGLConfigurations(com.getDefaultDisplay())) {
         DEBUG_PRINT("printEGLConfigurations failed\n");
         glClearColor(1.0f, 0.0f, 0.0f, 1.0f);
+        glClear(GL_COLOR_BUFFER_BIT);
         return false;
     }
 
@@ -156,6 +157,7 @@ bool EGL_GL_Info::doGraphics() {
     }
 
     glClearColor(0.0f, 1.0f, 0.0f, 1.0f);
+    glClear(GL_COLOR_BUFFER_BIT);
     return true;
 }
 bool EGL_GL_Info::exitGraphics() {
