@@ -6,7 +6,8 @@
     F(GL101) \
     F(GeometryShaderBasic) \
     F(PathRenderingBasic) \
-    F(TessShaderBasic)
+    F(TessShaderBasic) \
+    F(Texture3D)
 
 
 

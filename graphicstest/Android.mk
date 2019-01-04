@@ -9,6 +9,7 @@ LOCAL_SRC_FILES:= \
     tests/GeometryShaderBasic.cpp \
     tests/PathRenderingBasic.cpp \
     tests/TessShaderBasic.cpp \
+    tests/Texture3D.cpp \
     main.cpp \
     common.cpp \
     global.cpp \
