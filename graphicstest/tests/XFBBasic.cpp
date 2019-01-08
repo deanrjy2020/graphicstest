@@ -110,16 +110,24 @@ bool XFBBasic::doGraphics() {
     glUseProgram(gProgram);
     com.checkGlError("glUseProgram");
 
-    //glBeginTransformFeedback(GL_POINTS);
-    glBeginTransformFeedback(GL_TRIANGLES); // just match the glDrawArrays
-    com.checkGlError("glBeginTransformFeedback");
-
     glVertexAttribPointer(gvPositionHandle, 2, GL_FLOAT, GL_FALSE, 0, gTriangleVertices);
     com.checkGlError("glVertexAttribPointer");
     glEnableVertexAttribArray(gvPositionHandle);
     com.checkGlError("glEnableVertexAttribArray");
-    glDrawArrays(GL_TRIANGLES, 0, 3);
-    com.checkGlError("glDrawArrays");
+
+
+    glBeginTransformFeedback(GL_TRIANGLES);
+    com.checkGlError("glBeginTransformFeedback");
+    glDrawArrays(GL_TRIANGLES, 0, 3); // expected pass.
+    com.checkGlError("glDrawArrays1");
+
+#if 0
+    unsigned int idx[] = {1, 2, 3};
+    glDrawElements(GL_LINE_LOOP, 3, GL_UNSIGNED_BYTE, idx); // expected ERROR
+    com.checkGlError("glDrawElements");
+    glDrawArrays(GL_TRIANGLES, 0, 3); // should pass because the glDrawArrays1 is passing
+    com.checkGlError("glDrawArrays2");
+#endif
 
     glFlush();
 
