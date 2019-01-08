@@ -12,7 +12,7 @@ WindowSurface::WindowSurface(int w, int h) {
 }
 
 // do it manually here
-#define ANDROID_O
+#define ANDROID_P
 
 #if defined(ANDROID_P)
 WindowSurface::WindowSurface() {

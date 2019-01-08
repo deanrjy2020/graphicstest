@@ -7,7 +7,8 @@
     F(GeometryShaderBasic) \
     F(PathRenderingBasic) \
     F(TessShaderBasic) \
-    F(Texture3D)
+    F(Texture3D) \
+    F(XFBBasic)
 
 
 
