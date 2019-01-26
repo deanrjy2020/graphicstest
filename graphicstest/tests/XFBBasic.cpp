@@ -118,6 +118,14 @@ bool XFBBasic::doGraphics() {
 
     glBeginTransformFeedback(GL_TRIANGLES);
     com.checkGlError("glBeginTransformFeedback");
+
+#if 0
+    eglReleaseThread();
+    com.makeCurrent();
+    // Force the SW path when drawing for testing.
+    glEnable(0x6007); // GL_FORCE_SOFTWARE_NV
+#endif
+
     glDrawArrays(GL_TRIANGLES, 0, 3); // expected pass.
     com.checkGlError("glDrawArrays1");
 
