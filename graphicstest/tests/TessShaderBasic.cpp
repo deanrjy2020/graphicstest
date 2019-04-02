@@ -38,6 +38,8 @@ static const GLchar* tcs2 =
 "}\n";
 static const GLchar* tes2 =
 "#version 310 es\n"
+"#extension GL_EXT_tessellation_shader : enable\n"
+"#extension GL_OES_tessellation_shader : enable\n"
 "layout(isolines) in;\n"
 "uniform mat4 ModelViewProjectionMatrix;\n"
 "void main()\n"
@@ -48,8 +50,8 @@ static const GLchar* tes2 =
 "    float leng = length(p1 - p0) / 2.0;\n"
 "    // Linear interpolation  \n"
 "    vec3 p;\n"
-"    p.x = p0.x*u + p1.x*(1 - u);\n"
-"    p.y = p0.y + leng*sin(u * 2 * 3.1415);\n"
+"    p.x = p0.x*u + p1.x*(1.0 - u);\n"
+"    p.y = p0.y + leng*sin(u * 2.0 * 3.1415);\n"
 "    // Transform to clip coordinates  \n"
 "    gl_Position = ModelViewProjectionMatrix * vec4(p, 1);\n"
 "}";
